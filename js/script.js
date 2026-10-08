@@ -22,12 +22,19 @@ function initScenes() {
   scenesEl.classList.add('scenes--pinned');
   scenesEl.style.setProperty('--scene-count', count);
 
+  const sceneParts = scenes.map((scene) => ({
+    scene,
+    media: scene.querySelector('.scene__media'),
+    overlay: scene.querySelector('.scene__overlay'),
+    content: scene.querySelector('.scene__content'),
+    card: scene.querySelector('.scene__card'),
+    ruleFill: scene.querySelector('.scene__rule-fill'),
+  }));
+
   let ticking = false;
 
-  function sceneOpacity(band, index) {
+  function trapezoid(band, index, plateau, edge) {
     const dist = Math.abs(band - index);
-    const plateau = 0.25;
-    const edge = 0.75;
     if (dist <= plateau) return 1;
     if (dist >= edge) return 0;
     return 1 - (dist - plateau) / (edge - plateau);
@@ -44,10 +51,30 @@ function initScenes() {
     const progress = Math.min(Math.max(scrolled / scrollableHeight, 0), 1);
     const band = progress * (count - 1);
 
-    scenes.forEach((scene, i) => {
-      const opacity = sceneOpacity(band, i);
-      scene.style.opacity = opacity.toFixed(3);
-      scene.classList.toggle('is-active', opacity > 0.02);
+    sceneParts.forEach(({ scene, media, overlay, content, card, ruleFill }, i) => {
+      // Photo: wide, slow crossfade so backgrounds blend smoothly into each other.
+      const mediaOpacity = trapezoid(band, i, 0.2, 0.85);
+      // Text: narrower window with a lift-in, so outgoing/incoming copy don't
+      // sit on top of each other for long — it reads as the new section's
+      // text filling in once its photo has mostly taken over.
+      const contentOpacity = trapezoid(band, i, 0.1, 0.42);
+      const contentY = (1 - contentOpacity) * 16;
+      // How "settled" this scene is in its own slot — drives the index rule fill.
+      const ruleProgress = Math.min(Math.max(band - (i - 0.5), 0), 1);
+
+      media.style.opacity = mediaOpacity.toFixed(3);
+      overlay.style.opacity = mediaOpacity.toFixed(3);
+      content.style.opacity = contentOpacity.toFixed(3);
+      content.style.transform = `translateY(${contentY.toFixed(2)}px)`;
+      if (card) {
+        card.style.opacity = contentOpacity.toFixed(3);
+        card.style.transform = `translateY(${contentY.toFixed(2)}px)`;
+      }
+      if (ruleFill) {
+        ruleFill.style.transform = `scaleX(${ruleProgress.toFixed(3)})`;
+      }
+
+      scene.classList.toggle('is-active', contentOpacity > 0.5);
       scene.style.zIndex = String(i);
     });
   }
