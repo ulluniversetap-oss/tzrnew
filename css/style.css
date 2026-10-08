@@ -29,7 +29,7 @@
   --color-white: #ffffff;
   --color-black: #0b0d0f;
   --color-stone: #cbb28c;
-  --font-heading: 'Onder', 'Arial Narrow', sans-serif;
+  --font-heading: 'Onder', 'Oswald', 'Arial Narrow', sans-serif;
   --font-body: 'Gilroy', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --container-pad: clamp(20px, 3vw, 48px);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -310,7 +310,8 @@ button {
   color: var(--color-white);
   line-height: 0.86;
   letter-spacing: -0.01em;
-  font-size: clamp(56px, 11vw, 150px);
+  font-size: clamp(40px, 12vw, 150px);
+  white-space: nowrap;
 }
 
 .hero__aside {
