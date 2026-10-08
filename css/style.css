@@ -320,12 +320,17 @@ button {
   align-items: flex-end;
   gap: 28px;
   padding-bottom: 0.4em;
-  flex-shrink: 0;
+  flex-shrink: 1;
+  min-width: 0;
 }
 
-@media (min-width: 860px) {
+@media (min-width: 1200px) {
   .hero__aside {
     display: flex;
+  }
+
+  .hero__title {
+    font-size: clamp(57px, calc(6.74vw - 24px), 120px);
   }
 }
 
