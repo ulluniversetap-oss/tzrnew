@@ -5,8 +5,102 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.classList.toggle('menu-open');
   });
 
+  initEditorial();
   initScenes();
 });
+
+function initEditorial() {
+  const el = document.getElementById('editorial');
+  if (!el) return;
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // The two-photo-plus-centered-text composition has no room to breathe
+  // below ~640px — the plain stacked fallback reads better there.
+  const isNarrow = window.innerWidth < 640;
+  if (prefersReducedMotion || isNarrow) return;
+
+  const moments = Array.from(el.querySelectorAll('.editorial__moment'));
+  const count = moments.length;
+  if (count < 1) return;
+
+  el.classList.add('editorial--pinned');
+  el.style.setProperty('--moment-count', count);
+
+  const parts = moments.map((moment) => ({
+    moment,
+    mediaA: moment.querySelector('.editorial__media--a'),
+    mediaB: moment.querySelector('.editorial__media--b'),
+    text: moment.querySelector('.editorial__text'),
+  }));
+
+  // How big/offset each photo starts before settling into its final
+  // (CSS-defined) size and position, and how much of the moment's own
+  // window that settle takes.
+  const SETTLE = 0.6;
+  const START_A = { scale: 1.7, x: -8, y: 6 };
+  const START_B = { scale: 1.45, x: -16, y: -6 };
+
+  let ticking = false;
+
+  function clamp01(v) {
+    return Math.min(Math.max(v, 0), 1);
+  }
+
+  function update() {
+    ticking = false;
+
+    const rect = el.getBoundingClientRect();
+    const scrollableHeight = el.offsetHeight - window.innerHeight;
+    if (scrollableHeight <= 0) return;
+
+    const progress = clamp01(-rect.top / scrollableHeight);
+    const band = progress * count;
+
+    // Quick crossfade so one moment fades out exactly as the next fades
+    // in (same no-gap trick as the photo gallery below).
+    const enter = moments.map((_, i) => clamp01((band - i) / 0.25));
+
+    parts.forEach(({ mediaA, mediaB, text }, i) => {
+      const nextEnter = i + 1 < count ? enter[i + 1] : 0;
+      const momentOpacity = enter[i] * (1 - nextEnter);
+      parts[i].moment.style.opacity = momentOpacity.toFixed(3);
+
+      // Independent, slower pace for the photos settling into place.
+      const settle = clamp01((band - i) / SETTLE);
+      const ease = 1 - (1 - settle) * (1 - settle);
+
+      const aScale = START_A.scale + (1 - START_A.scale) * ease;
+      const aX = START_A.x * (1 - ease);
+      const aY = START_A.y * (1 - ease);
+      mediaA.style.transform = `translate(${aX}%, ${aY}%) scale(${aScale.toFixed(3)})`;
+
+      const bScale = START_B.scale + (1 - START_B.scale) * ease;
+      const bX = START_B.x * (1 - ease);
+      const bY = START_B.y * (1 - ease);
+      mediaB.style.transform = `translate(${bX}%, ${bY}%) scale(${bScale.toFixed(3)})`;
+
+      // Text appears once the photos are mostly settled. Each text
+      // variant has its own base centering transform in CSS, so the lift
+      // offset is appended to it rather than replacing it.
+      const textOpacity = clamp01((settle - 0.55) / 0.35);
+      const lift = (1 - textOpacity) * 14;
+      const base = text.classList.contains('editorial__text--center') ? 'translate(-50%, -50%)' : '';
+      text.style.opacity = textOpacity.toFixed(3);
+      text.style.transform = `${base} translateY(${lift.toFixed(2)}px)`;
+    });
+  }
+
+  function onScroll() {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(update);
+    }
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  update();
+}
 
 function initScenes() {
   const scenesEl = document.getElementById('scenes');
