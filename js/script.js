@@ -69,9 +69,9 @@ function initScenes() {
         card.style.transform = `translateY(${contentY.toFixed(2)}px)`;
       }
       if (ruleFill) {
-        // One continuous line for the whole scroll journey, not per-scene —
-        // it keeps growing smoothly as sections crossfade past it.
-        ruleFill.style.transform = `scaleX(${progress.toFixed(3)})`;
+        // Local to this scene: fills in as its own slot becomes active.
+        const ruleProgress = Math.min(Math.max(band - (i - 0.5), 0), 1);
+        ruleFill.style.transform = `scaleX(${ruleProgress.toFixed(3)})`;
       }
 
       scene.classList.toggle('is-active', contentOpacity > 0.5);
