@@ -59,8 +59,6 @@ function initScenes() {
       // text filling in once its photo has mostly taken over.
       const contentOpacity = trapezoid(band, i, 0.1, 0.42);
       const contentY = (1 - contentOpacity) * 16;
-      // How "settled" this scene is in its own slot — drives the index rule fill.
-      const ruleProgress = Math.min(Math.max(band - (i - 0.5), 0), 1);
 
       media.style.opacity = mediaOpacity.toFixed(3);
       overlay.style.opacity = mediaOpacity.toFixed(3);
@@ -71,7 +69,9 @@ function initScenes() {
         card.style.transform = `translateY(${contentY.toFixed(2)}px)`;
       }
       if (ruleFill) {
-        ruleFill.style.transform = `scaleX(${ruleProgress.toFixed(3)})`;
+        // One continuous line for the whole scroll journey, not per-scene —
+        // it keeps growing smoothly as sections crossfade past it.
+        ruleFill.style.transform = `scaleX(${progress.toFixed(3)})`;
       }
 
       scene.classList.toggle('is-active', contentOpacity > 0.5);

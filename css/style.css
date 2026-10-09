@@ -393,8 +393,10 @@ button {
 
 .scene__rule {
   display: block;
-  width: 100%;
-  max-width: 220px;
+  position: relative;
+  left: 50%;
+  width: 100vw;
+  margin-left: -50vw;
   height: 1px;
   background: rgba(255, 255, 255, 0.18);
   overflow: hidden;
