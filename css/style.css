@@ -34,7 +34,8 @@
   --font-heading: 'Onder', 'Oswald', 'Arial Narrow', sans-serif;
   --font-body: 'Gilroy', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --container-pad: clamp(20px, 3vw, 48px);
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out: cubic-bezier(0.25, 0.74, 0.22, 0.99);
+  --font-serif: 'Cormorant Garamond', 'Times New Roman', serif;
 }
 
 * {
@@ -211,7 +212,7 @@ button {
   transform: scaleX(0.55);
   transform-origin: left;
   opacity: 0.45;
-  transition: transform 0.35s var(--ease-out), opacity 0.35s var(--ease-out), background-color 0.35s ease;
+  transition: transform 0.35s var(--ease-out), opacity 0.35s var(--ease-out), background-color 0.35s var(--ease-out);
 }
 
 .header__link:hover::after,
@@ -236,7 +237,7 @@ button {
   color: var(--color-white);
   display: flex;
   align-items: center;
-  transition: color 0.3s ease, transform 0.3s var(--ease-out);
+  transition: color 0.3s var(--ease-out), transform 0.3s var(--ease-out);
 }
 
 .header__logo:hover,
@@ -251,7 +252,7 @@ button {
 }
 
 .menu-toggle {
-  transition: color 0.3s ease;
+  transition: color 0.3s var(--ease-out);
 }
 
 .menu-toggle:hover,
@@ -265,7 +266,7 @@ button {
 }
 
 .burger__line {
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s var(--ease-out);
 }
 
 .header__phone {
@@ -364,9 +365,11 @@ button {
 }
 
 .editorial__text {
+  font-family: var(--font-serif);
   padding: clamp(40px, 6vw, 72px) var(--container-pad);
-  font-size: clamp(20px, 2.4vw, 30px);
-  line-height: 1.5;
+  font-size: clamp(22px, 2.6vw, 32px);
+  font-weight: 500;
+  line-height: 1.45;
   font-style: italic;
   max-width: 50ch;
 }
@@ -542,9 +545,9 @@ button {
 }
 
 .scene-info__title {
-  font-family: var(--font-body);
+  font-family: var(--font-serif);
   font-weight: 500;
-  font-size: clamp(22px, 2.1vw, 32px);
+  font-size: clamp(24px, 2.4vw, 36px);
   line-height: 1.3;
   letter-spacing: -0.005em;
   overflow-wrap: break-word;
@@ -568,7 +571,7 @@ button {
   font-size: 14px;
   font-weight: 500;
   letter-spacing: 0.02em;
-  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.3s var(--ease-out), border-color 0.3s var(--ease-out), color 0.3s var(--ease-out);
 }
 
 .scene-info__cta:hover,
@@ -593,7 +596,7 @@ button {
   backdrop-filter: blur(6px);
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 4px;
-  transition: border-color 0.3s ease, background-color 0.3s ease;
+  transition: border-color 0.3s var(--ease-out), background-color 0.3s var(--ease-out);
 }
 
 .scene-card:hover,
