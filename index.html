@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ЖК Новый</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=22">
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero__media">
+    <img src="images/hero.webp" alt="ЖК Новый" class="hero__img">
+    <div class="hero__overlay"></div>
+  </div>
+
+  <header class="header">
+    <div class="header__group header__group--left reveal" style="--reveal-delay: 0.05s">
+      <button class="menu-toggle" type="button" aria-label="Открыть меню">
+        <span class="burger">
+          <span class="burger__line"></span>
+          <span class="burger__line"></span>
+          <span class="burger__line"></span>
+        </span>
+        <span class="header__menu-label">Меню</span>
+      </button>
+
+      <a href="#apartments" class="header__link header__link--nav">Смотреть квартиры</a>
+    </div>
+
+    <a href="#" class="header__logo reveal" style="--reveal-delay: 0.15s" aria-label="ЖК Новый — на главную">
+      <svg viewBox="0 0 100 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <mask id="skylineMask">
+          <rect width="100" height="60" fill="#fff"/>
+          <rect x="42" y="18" width="16" height="38" fill="#000"/>
+          <rect x="29" y="29" width="11" height="27" fill="#000"/>
+          <rect x="60" y="29" width="11" height="27" fill="#000"/>
+          <rect x="17" y="37" width="10" height="19" fill="#000"/>
+          <rect x="73" y="37" width="10" height="19" fill="#000"/>
+          <rect x="6" y="45" width="9" height="11" fill="#000"/>
+          <rect x="85" y="45" width="9" height="11" fill="#000"/>
+        </mask>
+        <path d="M5,56 A45,45 0 0 1 95,56 Z" fill="currentColor" mask="url(#skylineMask)"/>
+        <rect x="48.5" y="5" width="3" height="15" fill="currentColor"/>
+      </svg>
+    </a>
+
+    <div class="header__group header__group--right reveal" style="--reveal-delay: 0.05s">
+      <a href="tel:+79999999999" class="header__phone">+7 (999) 999-99-99</a>
+      <a href="#callback" class="header__link header__link--callback">Обратный звонок</a>
+    </div>
+  </header>
+
+  <div class="hero__bottom">
+    <h1 class="hero__title reveal" style="--reveal-delay: 0.25s">ЖК Новый</h1>
+  </div>
+</section>
+
+<section class="editorial" id="editorial">
+  <div class="editorial__viewport">
+
+    <div class="editorial__moment" data-moment="0">
+      <div class="editorial__media editorial__media--a">
+        <img src="images/scene-apartments.webp" alt="Фасад ЖК Новый" class="editorial__img">
+      </div>
+      <div class="editorial__media editorial__media--b">
+        <img src="images/scene-location.webp" alt="Комплекс ЖК Новый" class="editorial__img">
+      </div>
+      <p class="editorial__text editorial__text--center">Фасад собран из тёплого камня и тёмного металла — глубокие лоджии дарят каждой квартире собственный кадр города.</p>
+    </div>
+
+    <div class="editorial__moment" data-moment="1">
+      <div class="editorial__media editorial__media--a">
+        <img src="images/scene-courtyard.webp" alt="Двор ЖК Новый" class="editorial__img">
+      </div>
+      <div class="editorial__media editorial__media--b">
+        <img src="images/scene-infrastructure.webp" alt="Лобби ЖК Новый" class="editorial__img">
+      </div>
+      <p class="editorial__text editorial__text--left">Двор спроектирован как продолжение дома: закрытый периметр, разновысотное озеленение и маршруты, которые нигде не пересекаются с проездом машин.</p>
+    </div>
+
+  </div>
+</section>
+
+<section class="scenes" id="scenes">
+  <div class="scenes__viewport">
+
+    <div class="scenes__photos">
+      <div class="scene-photo" data-scene="0">
+        <img src="images/scene-apartments.webp" alt="Фасад ЖК Новый" class="scene-photo__img">
+      </div>
+      <div class="scene-photo" data-scene="1">
+        <img src="images/scene-courtyard.webp" alt="Двор ЖК Новый" class="scene-photo__img">
+      </div>
+      <div class="scene-photo" data-scene="2">
+        <img src="images/scene-infrastructure.webp" alt="Лобби ЖК Новый" class="scene-photo__img">
+      </div>
+      <div class="scene-photo" data-scene="3">
+        <img src="images/scene-location.webp" alt="Вид на комплекс ЖК Новый" class="scene-photo__img">
+      </div>
+      <div class="scenes__photos-overlay"></div>
+    </div>
+
+    <div class="scenes__info">
+      <div class="scene-info" data-scene="0">
+        <span class="scene-info__index">01 / 04</span>
+        <span class="scene-info__rule"><span class="scene-info__rule-fill"></span></span>
+        <h2 class="scene-info__title">Планировки на любой состав семьи</h2>
+        <p class="scene-info__text">От студии до четырёхкомнатной квартиры. Потолки 3,2 метра и панорамное остекление.</p>
+        <a href="#" class="scene-info__cta">Смотреть планировки</a>
+      </div>
+      <div class="scene-info" data-scene="1">
+        <span class="scene-info__index">02 / 04</span>
+        <span class="scene-info__rule"><span class="scene-info__rule-fill"></span></span>
+        <h2 class="scene-info__title">Двор без машин</h2>
+        <p class="scene-info__text">Закрытая территория, детские и спортивные площадки, променад и зоны отдыха под навесом.</p>
+        <a href="#" class="scene-info__cta">Смотреть благоустройство</a>
+      </div>
+      <div class="scene-info" data-scene="2">
+        <span class="scene-info__index">03 / 04</span>
+        <span class="scene-info__rule"><span class="scene-info__rule-fill"></span></span>
+        <h2 class="scene-info__title">Всё необходимое рядом</h2>
+        <p class="scene-info__text">Школа и детский сад во дворе, супермаркет на первых этажах, фитнес-клуб и подземный паркинг.</p>
+        <a href="#" class="scene-info__cta">Смотреть инфраструктуру</a>
+      </div>
+      <div class="scene-info" data-scene="3">
+        <span class="scene-info__index">04 / 04</span>
+        <span class="scene-info__rule"><span class="scene-info__rule-fill"></span></span>
+        <h2 class="scene-info__title">В десяти минутах от центра</h2>
+        <p class="scene-info__text">Рядом парк, набережная и станция метро — удобный выезд на три вылетные магистрали.</p>
+        <a href="#" class="scene-info__cta">Смотреть на карте</a>
+      </div>
+    </div>
+
+    <div class="scenes__cards">
+      <a href="#" class="scene-card" data-scene="0">
+        <span class="scene-card__title">Планировки квартир</span>
+        <span class="scene-card__link">Скачать PDF ↓</span>
+      </a>
+      <a href="#" class="scene-card" data-scene="1">
+        <span class="scene-card__title">Генплан двора</span>
+        <span class="scene-card__link">Скачать PDF ↓</span>
+      </a>
+      <a href="#" class="scene-card" data-scene="2">
+        <span class="scene-card__title">Социальные объекты</span>
+        <span class="scene-card__link">Скачать PDF ↓</span>
+      </a>
+      <a href="#" class="scene-card" data-scene="3">
+        <span class="scene-card__title">Схема проезда</span>
+        <span class="scene-card__link">Скачать PDF ↓</span>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<script src="js/script.js?v=22"></script>
+</body>
+</html>
