@@ -35,8 +35,8 @@ function initEditorial() {
 
   // How big/offset each photo starts before settling into its final
   // (CSS-defined) size and position, and how much of the moment's own
-  // window that settle takes.
-  const SETTLE = 0.6;
+  // window the crossfade takes.
+  const FADE = 0.6;
   const START_A = { scale: 1.7, x: -8, y: 6 };
   const START_B = { scale: 1.45, x: -16, y: -6 };
 
@@ -44,6 +44,12 @@ function initEditorial() {
 
   function clamp01(v) {
     return Math.min(Math.max(v, 0), 1);
+  }
+
+  // Cubic ease-out, matched to the site's --ease-out curve — used for the
+  // big settle motion so it decelerates the same way everything else does.
+  function easeOut(t) {
+    return 1 - (1 - t) * (1 - t) * (1 - t);
   }
 
   function update() {
@@ -56,39 +62,60 @@ function initEditorial() {
     const progress = clamp01(-rect.top / scrollableHeight);
     const band = progress * count;
 
-    // Fade-in paced to match the photos' own settle animation (not a
-    // quick snap), so the crossfade and the zoom-out read as one
-    // continuous scroll-driven motion instead of a pop. Moment 0 is
-    // already on screen at the very top, same as the gallery's scene 0.
-    const enter = moments.map((_, i) => (i === 0 ? 1 : clamp01((band - i) / SETTLE)));
+    // Fade-in paced to match the photos' settle, so the crossfade and the
+    // zoom-out read as one continuous scroll-driven motion instead of a
+    // pop. Moment 0 is already on screen at the very top.
+    const enter = moments.map((_, i) => (i === 0 ? 1 : clamp01((band - i) / FADE)));
 
     parts.forEach(({ mediaA, mediaB, text }, i) => {
       const nextEnter = i + 1 < count ? enter[i + 1] : 0;
       const momentOpacity = enter[i] * (1 - nextEnter);
       parts[i].moment.style.opacity = momentOpacity.toFixed(3);
 
-      // Independent, slower pace for the photos settling into place.
-      const settle = clamp01((band - i) / SETTLE);
-      const ease = 1 - (1 - settle) * (1 - settle);
+      // Local progress spans the photo's ENTIRE time on screen (not just
+      // its entrance), so the zoom keeps drifting the whole way through
+      // instead of settling once and going static — a slow, continuous
+      // parallax rather than a one-shot entrance effect.
+      const t = clamp01(band - i);
+      const ease = easeOut(Math.min(t / FADE, 1));
+      // A tiny continuous linear drift layered on top of the ease: the
+      // ease's motion tapers off near 1, this keeps things faintly alive
+      // for the rest of the moment's time on screen.
+      const driftA = t * 2.5;
+      const driftB = t * 3.5;
 
       const aScale = START_A.scale + (1 - START_A.scale) * ease;
       const aX = START_A.x * (1 - ease);
-      const aY = START_A.y * (1 - ease);
-      mediaA.style.transform = `translate(${aX}%, ${aY}%) scale(${aScale.toFixed(3)})`;
+      const aY = START_A.y * (1 - ease) - driftA;
+      mediaA.style.transform = `translate(${aX.toFixed(2)}%, ${aY.toFixed(2)}%) scale(${aScale.toFixed(3)})`;
 
       const bScale = START_B.scale + (1 - START_B.scale) * ease;
       const bX = START_B.x * (1 - ease);
-      const bY = START_B.y * (1 - ease);
-      mediaB.style.transform = `translate(${bX}%, ${bY}%) scale(${bScale.toFixed(3)})`;
+      const bY = START_B.y * (1 - ease) + driftB;
+      mediaB.style.transform = `translate(${bX.toFixed(2)}%, ${bY.toFixed(2)}%) scale(${bScale.toFixed(3)})`;
 
-      // Text appears once the photos are mostly settled. Each text
-      // variant has its own base centering transform in CSS, so the lift
-      // offset is appended to it rather than replacing it.
+      // Photos unveil through a shrinking clip-mask and a fading blur as
+      // they settle, rather than appearing already sharp.
+      const reveal = ease;
+      const clipAmt = (1 - reveal) * 7;
+      const blurAmt = (1 - reveal) * 10;
+      const mediaFilter = `blur(${blurAmt.toFixed(2)}px)`;
+      const mediaClip = `inset(${clipAmt.toFixed(2)}%)`;
+      mediaA.style.filter = mediaFilter;
+      mediaA.style.clipPath = mediaClip;
+      mediaB.style.filter = mediaFilter;
+      mediaB.style.clipPath = mediaClip;
+
+      // Text appears once the photos are mostly settled, with its own
+      // soft blur-in rather than a plain fade.
+      const settle = clamp01((band - i) / FADE);
       const textOpacity = clamp01((settle - 0.55) / 0.35);
-      const lift = (1 - textOpacity) * 14;
+      const lift = (1 - textOpacity) * 16;
+      const textBlur = (1 - textOpacity) * 6;
       const base = text.classList.contains('editorial__text--center') ? 'translate(-50%, -50%)' : '';
       text.style.opacity = textOpacity.toFixed(3);
       text.style.transform = `${base} translateY(${lift.toFixed(2)}px)`;
+      text.style.filter = `blur(${textBlur.toFixed(2)}px)`;
     });
   }
 

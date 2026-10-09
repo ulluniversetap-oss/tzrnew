@@ -378,7 +378,7 @@ button {
 
 @media (prefers-reduced-motion: no-preference) {
   .editorial--pinned {
-    height: calc(100vh * var(--moment-count, 2) * 1.5);
+    height: calc(100vh * var(--moment-count, 2) * 1.9);
   }
 
   .editorial--pinned .editorial__viewport {
@@ -402,20 +402,22 @@ button {
 
   .editorial--pinned .editorial__media {
     position: absolute;
-    will-change: transform;
+    will-change: transform, filter, clip-path;
   }
 
   .editorial--pinned .editorial__media--a {
     left: var(--container-pad);
     bottom: var(--container-pad);
-    width: 30vw;
-    height: 46vh;
+    width: 34vw;
+    height: 52vh;
+    box-shadow: 0 40px 80px -30px rgba(10, 8, 4, 0.4);
+    z-index: 1;
   }
 
   .editorial--pinned .editorial__media--b {
     right: 0;
     top: 0;
-    width: 38vw;
+    width: 40vw;
     height: 100vh;
   }
 
