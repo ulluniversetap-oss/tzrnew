@@ -56,9 +56,11 @@ function initEditorial() {
     const progress = clamp01(-rect.top / scrollableHeight);
     const band = progress * count;
 
-    // Quick crossfade so one moment fades out exactly as the next fades
-    // in (same no-gap trick as the photo gallery below).
-    const enter = moments.map((_, i) => clamp01((band - i) / 0.25));
+    // Fade-in paced to match the photos' own settle animation (not a
+    // quick snap), so the crossfade and the zoom-out read as one
+    // continuous scroll-driven motion instead of a pop. Moment 0 is
+    // already on screen at the very top, same as the gallery's scene 0.
+    const enter = moments.map((_, i) => (i === 0 ? 1 : clamp01((band - i) / SETTLE)));
 
     parts.forEach(({ mediaA, mediaB, text }, i) => {
       const nextEnter = i + 1 < count ? enter[i + 1] : 0;
