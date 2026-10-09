@@ -339,82 +339,68 @@ button {
 
 .scenes__viewport {
   position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(4, 100vh);
 }
 
-.scene {
+/* Base/fallback (no JS, or prefers-reduced-motion): a simple grid where each
+   scene's photo and text share one row and overlap within it — four plain
+   stacked full-height sections, nothing pinned or animated. The enhanced
+   pinned+sliding version below only switches on once JS confirms motion
+   is wanted. */
+.scenes__photos,
+.scenes__info,
+.scenes__cards {
+  display: contents;
+}
+
+[data-scene="0"] { grid-row: 1; grid-column: 1; }
+[data-scene="1"] { grid-row: 2; grid-column: 1; }
+[data-scene="2"] { grid-row: 3; grid-column: 1; }
+[data-scene="3"] { grid-row: 4; grid-column: 1; }
+
+.scene-photo {
   position: relative;
-  height: 100vh;
-}
-
-.scene + .scene {
-  margin-top: 2px;
-}
-
-.scene__sticky {
-  position: relative;
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
-}
-
-.scene__media {
-  position: absolute;
-  inset: 0;
   z-index: 0;
 }
 
-.scene__img {
+.scene-photo__img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center 35%;
 }
 
-.scene__overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  background: linear-gradient(to top, rgba(8, 9, 11, 0.75) 0%, rgba(8, 9, 11, 0.25) 35%, rgba(8, 9, 11, 0.1) 100%);
+.scenes__photos-overlay {
+  display: none;
 }
 
-.scene__content {
+.scenes__rule {
+  display: none;
+}
+
+.scene-info {
   position: relative;
   z-index: 1;
-  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   gap: 14px;
   max-width: 820px;
   padding: 0 var(--container-pad) clamp(32px, 6vw, 64px);
+  background: linear-gradient(to top, rgba(8, 9, 11, 0.75) 0%, rgba(8, 9, 11, 0.25) 35%, rgba(8, 9, 11, 0.1) 100%);
 }
 
-.scene__index {
+.scene-info__index {
   font-size: 13px;
   font-weight: 500;
   letter-spacing: 0.08em;
   color: var(--color-stone);
+  margin-bottom: 16px;
 }
 
-.scene__rule {
-  display: block;
-  width: 100vw;
-  margin-left: calc(-1 * var(--container-pad));
-  height: 1px;
-  background: rgba(255, 255, 255, 0.18);
-  overflow: hidden;
-}
-
-.scene__rule-fill {
-  display: block;
-  width: 100%;
-  height: 100%;
-  background: var(--color-stone);
-  transform: scaleX(0);
-  transform-origin: left;
-}
-
-.scene__title {
+.scene-info__title {
   font-family: var(--font-body);
   font-weight: 500;
   font-size: clamp(22px, 2.1vw, 32px);
@@ -423,14 +409,14 @@ button {
   overflow-wrap: break-word;
 }
 
-.scene__text {
+.scene-info__text {
   font-size: 16px;
   line-height: 1.6;
   color: rgba(255, 255, 255, 0.78);
   max-width: 42ch;
 }
 
-.scene__cta {
+.scene-info__cta {
   display: inline-flex;
   align-items: center;
   width: fit-content;
@@ -444,19 +430,20 @@ button {
   transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
-.scene__cta:hover,
-.scene__cta:focus-visible {
+.scene-info__cta:hover,
+.scene-info__cta:focus-visible {
   background: var(--color-stone);
   border-color: var(--color-stone);
   color: var(--color-black);
 }
 
-.scene__card {
-  display: none;
-  position: absolute;
+.scene-card {
+  position: relative;
   z-index: 1;
-  right: var(--container-pad);
-  bottom: clamp(32px, 6vw, 64px);
+  align-self: end;
+  justify-self: end;
+  margin: 0 var(--container-pad) clamp(32px, 6vw, 64px) 0;
+  display: none;
   flex-direction: column;
   gap: 18px;
   width: 190px;
@@ -468,51 +455,133 @@ button {
   transition: border-color 0.3s ease, background-color 0.3s ease;
 }
 
-.scene__card:hover,
-.scene__card:focus-visible {
+.scene-card:hover,
+.scene-card:focus-visible {
   border-color: var(--color-stone);
   background: rgba(8, 9, 11, 0.7);
 }
 
-.scene__card-title {
+.scene-card__title {
   font-size: 14px;
   font-weight: 500;
   line-height: 1.35;
 }
 
-.scene__card-link {
+.scene-card__link {
   font-size: 12px;
   letter-spacing: 0.03em;
   color: var(--color-stone);
 }
 
 @media (min-width: 720px) {
-  .scene__card {
+  .scene-card {
     display: flex;
   }
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  /* Each scene gets extra scroll runway (height > 100vh) before the next
-     one slides over it, so a section has time to actually be read instead
-     of flashing past. The sticky inner panel is what's covered — full
-     opacity throughout, no fading — by the next (higher z-index) panel
-     rising up behind it as you keep scrolling. */
-  .scenes--pinned .scene {
-    height: 180vh;
-    margin-top: 0;
+  /* Enhanced: one pinned viewport for the whole 4-scene journey. Photos
+     slide up to cover one another (no fading); the index/title/body/CTA
+     and the progress line live in a single fixed-position overlay that
+     just crossfades between each scene's copy — never moves, never
+     resets. JS adds .scenes--pinned once it has confirmed this is safe. */
+  .scenes--pinned {
+    height: calc(100vh * var(--scene-count, 4) * 1.6);
   }
 
-  .scenes--pinned .scene__sticky {
+  .scenes--pinned .scenes__viewport {
+    display: block;
     position: sticky;
     top: 0;
     height: 100vh;
+    overflow: hidden;
   }
 
-  .scenes--pinned .scene .scene__content,
-  .scenes--pinned .scene .scene__card {
+  .scenes--pinned .scenes__photos,
+  .scenes--pinned .scenes__info,
+  .scenes--pinned .scenes__cards {
+    display: block;
+  }
+
+  .scenes--pinned .scenes__photos {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .scenes--pinned .scene-photo {
+    position: absolute;
+    inset: 0;
+    transform: translateY(100%);
+    will-change: transform;
+  }
+
+  .scenes--pinned .scene-photo[data-scene="0"] {
+    transform: translateY(0);
+  }
+
+  .scenes--pinned .scenes__photos-overlay {
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(to top, rgba(8, 9, 11, 0.75) 0%, rgba(8, 9, 11, 0.25) 35%, rgba(8, 9, 11, 0.1) 100%);
+  }
+
+  .scenes--pinned .scenes__rule {
+    display: block;
+    position: absolute;
+    z-index: 2;
+    top: clamp(130px, 22vh, 220px);
+    left: 0;
+    width: 100vw;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.18);
+    overflow: hidden;
+  }
+
+  .scenes--pinned .scenes__info {
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+  }
+
+  .scenes--pinned .scene-info {
+    position: absolute;
+    inset: 0;
+    background: none;
     opacity: 0;
-    will-change: opacity, transform;
+    will-change: opacity;
+  }
+
+  .scenes--pinned .scene-info[data-scene="0"] {
+    opacity: 1;
+  }
+
+  .scenes--pinned .scenes__cards {
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+  }
+
+  .scenes--pinned .scene-card {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    align-self: auto;
+    justify-self: auto;
+    right: var(--container-pad);
+    bottom: clamp(32px, 6vw, 64px);
+    left: auto;
+    top: auto;
+    width: 190px;
+    height: fit-content;
+    opacity: 0;
+    will-change: opacity;
+  }
+
+  .scenes--pinned .scene-card[data-scene="0"] {
+    opacity: 1;
   }
 }
 
