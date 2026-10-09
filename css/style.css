@@ -393,10 +393,8 @@ button {
 
 .scene__rule {
   display: block;
-  position: relative;
-  left: 50%;
   width: 100vw;
-  margin-left: -50vw;
+  margin-left: calc(-1 * var(--container-pad));
   height: 1px;
   background: rgba(255, 255, 255, 0.18);
   overflow: hidden;
