@@ -376,10 +376,6 @@ button {
   display: none;
 }
 
-.scenes__rule {
-  display: none;
-}
-
 .scene-info {
   position: relative;
   z-index: 1;
@@ -397,7 +393,24 @@ button {
   font-weight: 500;
   letter-spacing: 0.08em;
   color: var(--color-stone);
-  margin-bottom: 16px;
+}
+
+.scene-info__rule {
+  display: block;
+  width: 100vw;
+  margin-left: calc(-1 * var(--container-pad));
+  height: 1px;
+  background: rgba(255, 255, 255, 0.18);
+  overflow: hidden;
+}
+
+.scene-info__rule-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--color-stone);
+  transform: scaleX(0);
+  transform-origin: left;
 }
 
 .scene-info__title {
@@ -528,19 +541,7 @@ button {
     background: linear-gradient(to top, rgba(8, 9, 11, 0.75) 0%, rgba(8, 9, 11, 0.25) 35%, rgba(8, 9, 11, 0.1) 100%);
   }
 
-  .scenes--pinned .scenes__rule {
-    display: block;
-    position: absolute;
-    z-index: 2;
-    top: clamp(130px, 22vh, 220px);
-    left: 0;
-    width: 100vw;
-    height: 1px;
-    background: rgba(255, 255, 255, 0.18);
-    overflow: hidden;
-  }
-
-  .scenes--pinned .scenes__info {
+.scenes--pinned .scenes__info {
     position: absolute;
     z-index: 2;
     inset: 0;

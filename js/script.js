@@ -18,7 +18,7 @@ function initScenes() {
   const photos = Array.from(scenesEl.querySelectorAll('.scene-photo'));
   const infos = Array.from(scenesEl.querySelectorAll('.scene-info'));
   const cards = Array.from(scenesEl.querySelectorAll('.scene-card'));
-  const ruleFill = scenesEl.querySelector('.scenes__rule-fill');
+  const ruleFills = Array.from(scenesEl.querySelectorAll('.scene-info__rule-fill'));
   const count = photos.length;
   if (count < 2) return;
 
@@ -48,12 +48,14 @@ function initScenes() {
 
     const progress = clamp01(-rect.top / scrollableHeight);
     const band = progress * count;
-
-    if (ruleFill) {
-      // One continuous bar for the whole journey — 25% done after scene 1,
-      // 50% after scene 2, and so on. Never resets, never moves.
-      ruleFill.style.transform = `scaleX(${(band / count).toFixed(3)})`;
-    }
+    // One continuous bar for the whole journey — 25% done after scene 1,
+    // 50% after scene 2, and so on. Every scene's rule gets the same
+    // value; only the active scene's copy is ever visible, so it reads
+    // as one line that never resets.
+    const ruleProgress = (band / count).toFixed(3);
+    ruleFills.forEach((fill) => {
+      fill.style.transform = `scaleX(${ruleProgress})`;
+    });
 
     for (let i = 0; i < count; i += 1) {
       // Scene 0 is the base layer, already in place from the start.
