@@ -398,19 +398,11 @@ button {
 
 .scene__rule {
   display: block;
-  width: 100%;
-  max-width: 200px;
-  height: 1px;
-  background: rgba(255, 255, 255, 0.18);
-  overflow: hidden;
-}
-
-.scene__divider {
-  display: block;
   width: 100vw;
   margin-left: calc(-1 * var(--container-pad));
   height: 1px;
   background: rgba(255, 255, 255, 0.18);
+  overflow: hidden;
 }
 
 .scene__rule-fill {
