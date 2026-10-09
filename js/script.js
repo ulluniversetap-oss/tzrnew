@@ -25,6 +25,7 @@ function initScenes() {
     scene.style.zIndex = String(i + 1);
     return {
       scene,
+      index: i,
       content: scene.querySelector('.scene__content'),
       card: scene.querySelector('.scene__card'),
       ruleFill: scene.querySelector('.scene__rule-fill'),
@@ -37,7 +38,7 @@ function initScenes() {
     ticking = false;
     const viewportH = window.innerHeight;
 
-    sceneParts.forEach(({ scene, content, card, ruleFill }) => {
+    sceneParts.forEach(({ scene, index, content, card, ruleFill }) => {
       const rect = scene.getBoundingClientRect();
       const holdRange = rect.height - viewportH;
       // 0 as this scene's panel starts sticking to the top, 1 once it's
@@ -55,7 +56,11 @@ function initScenes() {
         card.style.transform = `translateY(${contentY.toFixed(2)}px)`;
       }
       if (ruleFill) {
-        ruleFill.style.transform = `scaleX(${local.toFixed(3)})`;
+        // Each scene owns an equal 1/count share of the bar, so it reads
+        // as one continuous line: 25% done after scene 1, 50% after
+        // scene 2, and so on up to 100% at the last scene.
+        const globalProgress = (index + local) / count;
+        ruleFill.style.transform = `scaleX(${globalProgress.toFixed(3)})`;
       }
 
       scene.classList.toggle('is-active', contentOpacity > 0.5);
