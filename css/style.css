@@ -358,31 +358,11 @@ button {
   z-index: 0;
 }
 
-.scene__placeholder {
+.scene__img {
   width: 100%;
   height: 100%;
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-start;
-  padding: var(--container-pad);
-  background:
-    linear-gradient(135deg, rgba(203, 178, 140, 0.14), rgba(203, 178, 140, 0) 55%),
-    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.035) 0 2px, transparent 2px 14px),
-    #15181c;
-}
-
-.scene[data-scene="1"] .scene__placeholder { background-color: #171a1e; }
-.scene[data-scene="2"] .scene__placeholder { background-color: #13161a; }
-.scene[data-scene="3"] .scene__placeholder { background-color: #161920; }
-
-.scene__placeholder-label {
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  color: rgba(255, 255, 255, 0.35);
-  border: 1px dashed rgba(255, 255, 255, 0.2);
-  border-radius: 999px;
-  padding: 8px 16px;
+  object-fit: cover;
+  object-position: center 35%;
 }
 
 .scene__overlay {
