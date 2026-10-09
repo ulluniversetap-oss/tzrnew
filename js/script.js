@@ -20,48 +20,34 @@ function initScenes() {
   if (count < 2) return;
 
   scenesEl.classList.add('scenes--pinned');
-  scenesEl.style.setProperty('--scene-count', count);
 
-  const sceneParts = scenes.map((scene) => ({
-    scene,
-    media: scene.querySelector('.scene__media'),
-    overlay: scene.querySelector('.scene__overlay'),
-    content: scene.querySelector('.scene__content'),
-    card: scene.querySelector('.scene__card'),
-    ruleFill: scene.querySelector('.scene__rule-fill'),
-  }));
+  const sceneParts = scenes.map((scene, i) => {
+    scene.style.zIndex = String(i + 1);
+    return {
+      scene,
+      content: scene.querySelector('.scene__content'),
+      card: scene.querySelector('.scene__card'),
+      ruleFill: scene.querySelector('.scene__rule-fill'),
+    };
+  });
 
   let ticking = false;
 
-  function trapezoid(band, index, plateau, edge) {
-    const dist = Math.abs(band - index);
-    if (dist <= plateau) return 1;
-    if (dist >= edge) return 0;
-    return 1 - (dist - plateau) / (edge - plateau);
-  }
-
   function update() {
     ticking = false;
+    const viewportH = window.innerHeight;
 
-    const rect = scenesEl.getBoundingClientRect();
-    const scrollableHeight = scenesEl.offsetHeight - window.innerHeight;
-    if (scrollableHeight <= 0) return;
-
-    const scrolled = -rect.top;
-    const progress = Math.min(Math.max(scrolled / scrollableHeight, 0), 1);
-    const band = progress * (count - 1);
-
-    sceneParts.forEach(({ scene, media, overlay, content, card, ruleFill }, i) => {
-      // Photo: wide, slow crossfade so backgrounds blend smoothly into each other.
-      const mediaOpacity = trapezoid(band, i, 0.2, 0.85);
-      // Text: narrower window with a lift-in, so outgoing/incoming copy don't
-      // sit on top of each other for long — it reads as the new section's
-      // text filling in once its photo has mostly taken over.
-      const contentOpacity = trapezoid(band, i, 0.1, 0.42);
+    sceneParts.forEach(({ scene, content, card, ruleFill }) => {
+      const rect = scene.getBoundingClientRect();
+      const holdRange = rect.height - viewportH;
+      // 0 as this scene's panel starts sticking to the top, 1 once it's
+      // about to be covered by the next panel rising over it.
+      const local = holdRange > 0 ? Math.min(Math.max(-rect.top / holdRange, 0), 1) : 0;
+      // Text fades/lifts in quickly once the panel is stuck in place —
+      // the photo itself never fades, it's simply slid over by the next one.
+      const contentOpacity = Math.min(local / 0.12, 1);
       const contentY = (1 - contentOpacity) * 16;
 
-      media.style.opacity = mediaOpacity.toFixed(3);
-      overlay.style.opacity = mediaOpacity.toFixed(3);
       content.style.opacity = contentOpacity.toFixed(3);
       content.style.transform = `translateY(${contentY.toFixed(2)}px)`;
       if (card) {
@@ -69,13 +55,10 @@ function initScenes() {
         card.style.transform = `translateY(${contentY.toFixed(2)}px)`;
       }
       if (ruleFill) {
-        // Local to this scene: fills in as its own slot becomes active.
-        const ruleProgress = Math.min(Math.max(band - (i - 0.5), 0), 1);
-        ruleFill.style.transform = `scaleX(${ruleProgress.toFixed(3)})`;
+        ruleFill.style.transform = `scaleX(${local.toFixed(3)})`;
       }
 
       scene.classList.toggle('is-active', contentOpacity > 0.5);
-      scene.style.zIndex = String(i);
     });
   }
 

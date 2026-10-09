@@ -344,12 +344,17 @@ button {
 .scene {
   position: relative;
   height: 100vh;
-  overflow: hidden;
-  opacity: 1;
 }
 
 .scene + .scene {
   margin-top: 2px;
+}
+
+.scene__sticky {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
 }
 
 .scene__media {
@@ -496,37 +501,26 @@ button {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .scenes--pinned {
-    height: calc(100vh * var(--scene-count));
+  /* Each scene gets extra scroll runway (height > 100vh) before the next
+     one slides over it, so a section has time to actually be read instead
+     of flashing past. The sticky inner panel is what's covered — full
+     opacity throughout, no fading — by the next (higher z-index) panel
+     rising up behind it as you keep scrolling. */
+  .scenes--pinned .scene {
+    height: 180vh;
+    margin-top: 0;
   }
 
-  .scenes--pinned .scenes__viewport {
+  .scenes--pinned .scene__sticky {
     position: sticky;
     top: 0;
     height: 100vh;
-    overflow: hidden;
-  }
-
-  .scenes--pinned .scene {
-    position: absolute;
-    inset: 0;
-    margin-top: 0;
-    pointer-events: none;
-  }
-
-  .scenes--pinned .scene .scene__media,
-  .scenes--pinned .scene .scene__overlay {
-    opacity: 0;
   }
 
   .scenes--pinned .scene .scene__content,
   .scenes--pinned .scene .scene__card {
     opacity: 0;
     will-change: opacity, transform;
-  }
-
-  .scenes--pinned .scene.is-active {
-    pointer-events: auto;
   }
 }
 
