@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ЖК Новый — Архитектура проекта</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;1,400&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===================== HEADER ===================== -->
+<header class="header" data-theme="light">
+  <div class="header__blur" aria-hidden="true"></div>
+
+  <div class="header__group header__group--left">
+    <button class="menu-btn" type="button" aria-label="Открыть меню">
+      <span class="menu-btn__lines">
+        <span></span><span></span>
+      </span>
+      <span class="menu-btn__label">Меню</span>
+    </button>
+    <a href="#" class="header__link">Квартиры</a>
+  </div>
+
+  <a href="#" class="header__logo" aria-label="На главную">
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M7 17c0-3 3-3 5-5s2-5-1-6-6 1-5 4" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/>
+    </svg>
+  </a>
+
+  <div class="header__group header__group--right">
+    <a href="#" class="header__link">Контакты</a>
+    <button class="heart-btn" type="button" aria-label="Избранное">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 20.3s-7.5-4.6-10-9.2C.5 7.6 2.3 4 6 4c2.2 0 3.7 1.3 6 3.8C14.3 5.3 15.8 4 18 4c3.7 0 5.5 3.6 4 7.1-2.5 4.6-10 9.2-10 9.2z" stroke="currentColor" stroke-width="1.1"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<div class="scroll-indicator" aria-hidden="true">
+  <div class="scroll-indicator__track"><div class="scroll-indicator__thumb"></div></div>
+</div>
+
+<main>
+
+  <!-- ===================== SCREEN 1 — HERO ===================== -->
+  <section class="screen screen--1" id="screen-1" data-theme="light">
+    <div class="screen__sticky">
+      <div class="hero__media">
+        <img class="hero__img" src="assets/hero.webp?v=2" alt="" decoding="async">
+        <div class="hero__overlay"></div>
+      </div>
+
+      <div class="hero__word-wrap">
+        <div class="hero__word-shift">
+          <div class="hero__word-mask">
+            <h1 class="hero__word">Новый</h1>
+          </div>
+          <p class="hero__caption">Архитектура проекта</p>
+        </div>
+      </div>
+
+      <p class="hero__intro">
+        Дом на берегу Волги, где панорамное остекление открывает
+        город и реку с высоты каждого этажа. Архитектура, в которой
+        свет и простор не заканчиваются у окна.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===================== SCREEN 2 — PARALLAX DUO ===================== -->
+  <section class="screen screen--2" id="screen-2" data-theme="light">
+    <div class="screen__sticky">
+      <p class="duo__text">
+        Каждый этаж открывает<br>
+        собственный горизонт города и реки,<br>
+        приглашая смотреть дальше —<br>
+        вместе со светом, который меняется весь день.
+      </p>
+
+      <div class="duo__media duo__media--a">
+        <img src="assets/facade-evening.webp?v=2" alt="" decoding="async">
+      </div>
+      <div class="duo__media duo__media--b">
+        <img src="assets/corner-dawn.webp?v=2" alt="" decoding="async">
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SCREEN 3 — SPLIT ===================== -->
+  <section class="screen screen--3" id="screen-3" data-theme="light">
+    <div class="screen__sticky">
+      <!-- split__shift carries ONLY the exit nudge (screen 4 shuttering
+           up over this section); the entrance/dwell tweens below live on
+           their own elements/properties so the two never touch the same
+           transform. -->
+      <div class="split__shift">
+        <div class="split__text-wrap">
+          <p class="split__text">
+            Подъезды ЖК Новый встречают тёплым деревом потолка, мрамором
+            пола и чёткой навигацией по этажам. Для велосипедов и колясок
+            в каждом подъезде — отдельное помещение, чтобы коридоры
+            и лестницы оставались свободными.
+          </p>
+        </div>
+
+        <div class="split__media">
+          <div class="split__media-mask">
+            <img src="assets/tower-sunset.webp?v=2" alt="" decoding="async">
+          </div>
+        </div>
+
+        <div class="split__detail">
+          <img src="assets/tower-detail.webp?v=2" alt="" decoding="async">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SCREEN 4 — RESIDENCES ===================== -->
+  <section class="screen screen--4" id="screen-4" data-theme="dark">
+    <div class="screen__sticky">
+      <div class="res__media">
+        <img class="res__img" src="assets/residences-bg.webp" alt="" decoding="async">
+        <div class="res__gradient"></div>
+      </div>
+
+      <div class="res__word-wrap">
+        <div class="res__word-mask">
+          <h2 class="res__word">Резиденции</h2>
+        </div>
+        <p class="res__caption">Дома для жизни у Волги</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+<script src="main.js"></script>
+</body>
+</html>

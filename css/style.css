@@ -376,16 +376,16 @@ button {
   text-align: center;
 }
 
-/* Enhanced layout: the two photos sit at different heights inside a tall
-   (240vh) relative box and simply scroll past at native speed — no
-   transform math, no pinning. The caption is position:sticky, so it
-   holds its place on screen while the photos travel past it on either
-   side, then scrolls away naturally once the moment's box ends and the
-   next one begins. */
+/* Enhanced layout: the two photos sit flush against the left/right edges
+   of the viewport, nearly level with one another, inside a tall relative
+   box that lets them scroll past at native speed — no transform math, no
+   pinning. The caption is position:sticky, so it holds its place centered
+   on screen while the photos travel past it on either side, then scrolls
+   away naturally once the moment's box ends and the next one begins. */
 @media (min-width: 860px) {
   .editorial__moment {
     position: relative;
-    min-height: 230vh;
+    min-height: 190vh;
   }
 
   .editorial__moment + .editorial__moment {
@@ -395,36 +395,32 @@ button {
        and the next caption starts entering while the old one is still
        leaving. A full empty beat of cream between moments is also just
        how the reference breathes between sections. */
-    margin-top: 100vh;
+    margin-top: 80vh;
   }
 
   .editorial__media {
     position: absolute;
-    width: 36vw;
-    height: 82vh;
+    width: 38vw;
+    height: 76vh;
     box-shadow: 0 40px 80px -30px rgba(10, 8, 4, 0.4);
   }
 
   .editorial__media--a {
     left: 0;
-    top: 4vh;
+    top: 10vh;
   }
 
   .editorial__media--b {
     right: 0;
-    top: 108vh;
+    top: 7vh;
   }
 
   .editorial__text {
     position: sticky;
-    top: 42vh;
+    top: 38vh;
     z-index: 2;
-    width: min(620px, 40vw);
+    width: min(600px, 40vw);
     padding: 0;
-  }
-
-  .editorial__text--left {
-    margin: 0 auto;
   }
 }
 
