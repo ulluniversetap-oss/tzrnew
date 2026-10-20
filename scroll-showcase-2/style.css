@@ -1,0 +1,553 @@
+:root {
+  --green-deep: #0B2A20;
+  --green-mid: #0F3F37;
+  --teal: #0F5A52;
+  --beige: #E6D9BF;
+  --beige-dim: rgba(230, 217, 191, 0.8);
+
+  --font-serif: 'Newsreader', 'Cormorant Garamond', serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --edge: 40px;
+  --col-2: 16.7vw;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { width: 100%; }
+
+body {
+  font-family: var(--font-sans);
+  background: var(--green-deep);
+  color: var(--beige);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+img { display: block; width: 100%; height: 100%; object-fit: cover; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: none; cursor: none; }
+
+/* ===================== CUSTOM CURSOR ===================== */
+
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 200;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.cursor__ring {
+  position: absolute;
+  top: -14px;
+  left: -14px;
+  width: 28px;
+  height: 28px;
+  border: 1px solid rgba(230, 217, 191, 0.6);
+  border-radius: 50%;
+}
+
+.cursor__dot {
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--beige);
+  transition: width 0.25s var(--ease-out), height 0.25s var(--ease-out), top 0.25s var(--ease-out), left 0.25s var(--ease-out);
+}
+
+/* Toggled while hovering a .features__item: a plain white dot that grows
+   and inverts via mix-blend-mode, independent of the ring (which just
+   keeps following underneath, unused for this interaction). */
+.cursor__dot--list {
+  width: 6px;
+  height: 6px;
+  top: -3px;
+  left: -3px;
+  background: #fff;
+  mix-blend-mode: difference;
+}
+
+.cursor__dot--list.cursor__dot--grow {
+  width: 10px;
+  height: 10px;
+  top: -5px;
+  left: -5px;
+}
+
+@media (hover: none) {
+  .cursor { display: none; }
+  body { cursor: auto; }
+}
+
+/* ===================== HEADER ===================== */
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px var(--edge) 0;
+  color: var(--beige);
+}
+
+.header__blur {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 48px;
+  z-index: -1;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, transparent 100%);
+  border-top: 1px solid rgba(230, 217, 191, 0.12);
+}
+
+/* A faint scrim under the blur, independent of it — keeps the header
+   legible over the lightest moments (the Spa photo) without the blur
+   having to work harder than its own design calls for. */
+.header__scrim {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  z-index: -2;
+  background: linear-gradient(to bottom, rgba(5, 20, 16, 0.45) 0%, transparent 100%);
+}
+
+.header__group { display: flex; align-items: center; gap: 32px; flex: 1; }
+.header__group--right { justify-content: flex-end; }
+
+.header__link { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.12em; }
+
+.menu-btn { display: flex; align-items: center; gap: 10px; }
+.menu-btn__lines { display: flex; flex-direction: column; gap: 4px; width: 18px; }
+.menu-btn__lines span { display: block; height: 1px; width: 100%; background: currentColor; }
+.menu-btn__label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.12em; }
+
+.header__brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.header__wordmark {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-style: italic;
+  font-size: 28px;
+  line-height: 1;
+  overflow: hidden;
+  will-change: transform, opacity, clip-path;
+}
+
+.header__logo { display: flex; align-items: center; justify-content: center; color: inherit; }
+.header__logo svg { width: 24px; height: 24px; }
+.heart-btn svg { width: 17px; height: 17px; }
+
+/* ===================== SCROLL INDICATOR ===================== */
+
+.scroll-indicator { position: fixed; top: 0; right: 14px; height: 100vh; width: 3px; z-index: 99; pointer-events: none; }
+.scroll-indicator__track { position: relative; width: 100%; height: 100%; }
+.scroll-indicator__thumb {
+  position: absolute; left: 0; top: 0; width: 3px; height: 14px;
+  background: var(--beige); border-radius: 2px;
+}
+
+/* ===================== SCREEN SHELL ===================== */
+
+.screen { position: relative; background: var(--green-deep); }
+.screen__sticky { position: sticky; top: 0; height: 100vh; overflow: hidden; }
+
+.screen--1 { height: 180vh; z-index: 1; }
+.screen--2 { height: 760vh; z-index: 2; } /* combined Premium Living -> Open the Doors */
+.screen--4 { height: 180vh; z-index: 4; } /* extra 80vh gives the exit-into-features shutter somewhere to happen */
+.features { height: 500vh; z-index: 5; } /* 100vh * (items.length + 1); kept in sync with CONFIG.features.items by main.js at runtime */
+
+/* ===================== SCREEN 1 — HERO ===================== */
+
+.hero__collage-wrap {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  will-change: transform;
+}
+
+.hero__collage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 170vmax;
+  height: 170vmax;
+  margin: -85vmax 0 0 -85vmax;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  /* Named areas guarantee full coverage — no unfilled cells left as
+     "holes" in the rotated collage (which read as a void through the
+     screen--1 background). */
+  grid-template-areas:
+    "t1 t2 tw tw t4 t6"
+    "t8 t8 tw tw t5 t7";
+  gap: 1.1vmax;
+  will-change: transform;
+}
+
+.tile { position: relative; overflow: hidden; background: var(--green-deep); opacity: 0; }
+.tile--1 { grid-area: t1; }
+.tile--2 { grid-area: t2; }
+.tile--3 { grid-area: tw; }
+.tile--4 { grid-area: t4; }
+.tile--5 { grid-area: t5; }
+.tile--6 { grid-area: t6; }
+.tile--7 { grid-area: t7; }
+.tile--8 { grid-area: t8; }
+
+.hero__tint {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(135deg, rgba(11, 42, 32, 0.6) 0%, rgba(15, 90, 82, 0.35) 55%, rgba(30, 90, 37, 0.55) 100%);
+  mix-blend-mode: multiply;
+}
+
+.hero__intro {
+  position: absolute;
+  left: var(--edge);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 220px;
+  font-size: 16px;
+  line-height: 1.4;
+  color: var(--beige);
+  opacity: 0;
+  z-index: 2;
+}
+
+.hero__title-wrap {
+  position: absolute;
+  right: var(--edge);
+  bottom: 56px;
+  text-align: right;
+  z-index: 2;
+}
+
+.hero__title-mask { overflow: hidden; }
+
+.hero__title-line {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  font-size: clamp(56px, 9.5vw, 190px);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  color: var(--beige);
+}
+
+.hero__arrow {
+  position: absolute;
+  left: var(--edge);
+  bottom: 40px;
+  width: 32px;
+  height: 32px;
+  color: var(--beige);
+  opacity: 0;
+  z-index: 2;
+}
+
+.hero__arrow svg { width: 100%; height: 100%; }
+
+/* ===================== SCREEN 2 — PREMIUM LIVING -> OPEN THE DOORS =====================
+   One continuous pinned sequence. The photo stack is always full-bleed
+   behind everything; the panel is a plain opaque overlay that grows from
+   the left and simply covers more of it — the photo itself never moves,
+   resizes or clips, so nothing about it has to "hand off" to a new
+   section. The two copy blocks share the same left slot and take turns
+   via opacity, exactly like two frames of one sequence rather than two
+   different screens. */
+
+.combo__photos { position: absolute; inset: 0; }
+
+.combo__slide {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.combo__slide--1 { z-index: 1; }
+.combo__slide--2 { z-index: 2; will-change: transform; }
+.combo__slide--3 { z-index: 3; will-change: transform; }
+.combo__slide--2 img,
+.combo__slide--3 img { will-change: transform; }
+
+.combo__panel {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 50vw;
+  height: 100%;
+  background: linear-gradient(170deg, var(--green-deep) 0%, var(--green-mid) 100%);
+  will-change: transform;
+  z-index: 4;
+}
+
+.combo__living,
+.combo__doors {
+  position: absolute;
+  left: var(--col-2);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  width: min(480px, 40vw);
+  will-change: transform, opacity;
+}
+
+.combo__doors { opacity: 0; }
+
+.living__title {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-serif);
+  font-weight: 300;
+  font-size: clamp(34px, 3.4vw, 64px);
+  line-height: 1.05;
+  color: var(--beige-dim);
+}
+
+.living__caption {
+  margin-top: 20px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  line-height: 1.8;
+  color: rgba(230, 217, 191, 0.5);
+}
+
+.doors__title {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  font-size: clamp(30px, 2.8vw, 48px);
+  line-height: 1.15;
+  color: var(--beige);
+  will-change: transform;
+}
+
+.doors__square {
+  width: 210px;
+  height: 215px;
+  margin-top: 32px;
+  overflow: hidden;
+  position: relative;
+  will-change: transform;
+}
+
+.doors__text {
+  margin-top: 32px;
+  width: 290px;
+  max-width: 100%;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--beige-dim);
+  will-change: transform;
+}
+
+/* ===================== SCREEN 4 — WELLNESS ===================== */
+
+.well__media { position: absolute; inset: 0; }
+.well__img { will-change: transform; }
+
+.well__gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, rgba(11, 42, 32, 0.75) 0%, rgba(11, 42, 32, 0.25) 40%, transparent 65%);
+}
+
+/* Separate from well__gradient (which is a fixed readability layer) so
+   the scrubbed exit-darken below doesn't fight a static opacity. */
+.well__darken {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: 0;
+}
+
+.well__text {
+  position: absolute;
+  left: var(--col-2);
+  top: 46%;
+  transform: translateY(-50%);
+  width: 250px;
+  font-size: 16px;
+  line-height: 1.45;
+  color: var(--beige);
+  opacity: 0;
+  z-index: 2;
+}
+
+.well__word-wrap {
+  position: absolute;
+  right: var(--edge);
+  bottom: 48px;
+  text-align: right;
+  z-index: 2;
+}
+
+.well__caption {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--beige);
+  opacity: 0;
+  margin-bottom: 8px;
+}
+
+.well__word-mask { overflow: hidden; }
+
+.well__word {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  font-size: clamp(56px, 9.5vw, 190px);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  color: var(--beige);
+}
+
+/* ===================== SCREEN 5 — FEATURES ===================== */
+
+.features__photo-col {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 50vw;
+  height: 100%;
+  overflow: hidden;
+  will-change: transform;
+}
+
+.features__photos { position: absolute; inset: 0; }
+
+.features__slide {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  will-change: clip-path;
+}
+
+.features__slide img { will-change: transform; }
+
+.features__panel-col {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 50vw;
+  height: 100%;
+  background:
+    radial-gradient(60% 60% at 25% 60%, #0D4A58 0%, transparent 70%),
+    radial-gradient(70% 70% at 100% 100%, #1B5A35 0%, transparent 60%),
+    #0A2A22;
+  overflow: hidden;
+  will-change: transform;
+}
+
+.features__list {
+  position: absolute;
+  right: var(--edge);
+  top: 22%;
+  list-style: none;
+  text-align: right;
+  opacity: 0;
+}
+
+.features__item {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  font-size: clamp(30px, 3vw, 56px);
+  line-height: 1.3;
+  color: var(--beige);
+  opacity: 0.18;
+  cursor: pointer;
+  transition: opacity 0.5s ease;
+}
+
+.features__item--active { opacity: 1; }
+
+/* Positioned relative to .features__panel-col, which already starts at
+   the viewport's 50vw mark — so this just needs the ordinary edge inset,
+   not another 50vw on top of it. */
+.features__copy {
+  position: absolute;
+  left: var(--edge);
+  bottom: var(--edge);
+  width: 260px;
+}
+
+.features__text {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  font-size: 15px;
+  line-height: 1.3;
+  color: var(--beige);
+  opacity: 0;
+  will-change: transform, opacity, filter;
+}
+
+.features__text--active { position: relative; }
+
+/* ===================== REDUCED MOTION ===================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__title-line, .well__word { transform: none; }
+  .hero__intro, .hero__arrow, .well__text, .well__caption { opacity: 1; }
+  .combo__panel { transform: translateX(0); }
+  .combo__doors { opacity: 1; }
+  .features__photo-col, .features__panel-col { transform: none; }
+  .features__list { opacity: 1; }
+}
+
+/* ===================== RESPONSIVE ===================== */
+
+@media (max-width: 1024px) {
+  :root { --edge: 28px; --col-2: 12vw; }
+}
+
+@media (max-width: 768px) {
+  .hero__collage { grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(3, 1fr); }
+  .tile--5, .tile--6, .tile--7, .tile--8 { display: none; }
+  .tile--4 { grid-column: 4 / 5; grid-row: 1 / 3; }
+
+  .combo__living, .combo__doors { width: 80vw; }
+  .combo__panel { width: 100vw; }
+
+  /* Split becomes a stack; photo switching drops clip-path for a plain
+     fade (cheaper and reads fine at this size), list goes to one
+     horizontally-scrollable row above the paragraph. */
+  .features__photo-col, .features__panel-col { width: 100%; position: relative; }
+  .features__photo-col { height: 55vh; }
+  .features__panel-col { height: auto; min-height: 45vh; padding: 24px 0; }
+  .features__slide { transition: opacity 0.5s ease; }
+  .features__list {
+    position: static;
+    display: flex;
+    gap: 24px;
+    overflow-x: auto;
+    padding: 0 var(--edge) 16px;
+    text-align: left;
+    white-space: nowrap;
+  }
+  .features__item { font-size: 28px; }
+  .features__copy { position: static; width: auto; padding: 0 var(--edge); margin-top: 16px; }
+  .features__text { position: static; }
+}
